@@ -14,8 +14,10 @@ function CareerTest({currentQuestionNumber, totalQuestions, currentQuestion, isT
 
     if (isTestFinished) {
         return (
-            <div id="careerTestContainer" className="w-[90%] h-96 border-1 shadow-md px-24 py-4 flex flex-col gap-4 text-center">
-                Test Completed
+            <div id="careerTestContainer" className="w-[90%] h-96 border-1 shadow-md px-24 py-4 flex flex-col gap-4 flex items-start">
+                <h4>Test completed</h4>
+                <label>Well done on completing your test. You can view the results now.</label>
+                <button className="rounded-md h-12 w-48 bg-orange-400 hover:bg-orange-500 cursor-pointer" >See your results</button>
             </div>
         )
     }
