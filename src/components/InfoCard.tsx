@@ -8,7 +8,7 @@ type InfoCardProps = {
 function InfoCard({id, mainText, secondaryText, logoPath}: InfoCardProps) {
     return (
         <div id={id} className="border-1 h-56px w-3xs p-2 rounded-md">
-            <h className="font-bold">{mainText}</h>
+            <h4 className="font-bold">{mainText}</h4>
             <p>{secondaryText}</p>
         </div>
     )

@@ -1,11 +1,34 @@
 import {useSearchParams} from "react-router-dom";
-import InfoCard from "./Components/InfoCard";
-import CareerTest from "./Components/CareerTest";
+import InfoCard from "./components/InfoCard";
+import CareerTest from "./components/CareerTest";
+import {useEffect, useState} from "react";
+import {getQuestionForUser} from "./services/TestService";
+
+import type {QuestionProp} from "./types";
 
 function CareerPathTest() {
 
     const [user] = useSearchParams();
     const username: string = user.get("user")
+
+    const [questions, setQuestions] = useState<unknown>({});
+    const [currentQuestion, setCurrentQuestion] = useState<QuestionProp>(null)
+    const [loading, setLoading] = useState(true);
+    const [testFinished, setTestFinished] = useState(false);
+
+    useEffect(() => {
+        getQuestionForUser(username).then(response => {
+            setQuestions(response.questions);
+            setLoading(false);
+            getFirstUnansweredQuestion(response.questions)
+
+            //TODO Check questions to see if test is finished
+        }).catch(error => console.log("Error found getting test questions", error))
+    }, [user])
+
+    function getFirstUnansweredQuestion(questions) {
+        setCurrentQuestion(questions[0]);
+    }
 
     return (
         <div
@@ -14,7 +37,7 @@ function CareerPathTest() {
             <div id="careerPathTestHeader">
                 <img src={""} alt={"Career Path Test Home"}/>
                 <h4>Career path test</h4>
-                <h3>Discover careers that match your skills and personailty</h3>
+                <h3>Discover careers that match your skills and personality</h3>
             </div>
             <div id="careerPathTestContentContainer" className="flex flex-col gap-8 justify-center items-center">
                 <div id="careerPathTestInfoCards" className="flex flex-row justify-between gap-3">
@@ -41,7 +64,13 @@ function CareerPathTest() {
                     <p>We've analysed data from thousands of our members who work in graduate roles across a range of sectors to understand which personalities, skills and values fit best for each career path.</p>
                     <p>Take this test to understand what career path you might be suited to and how to get started.</p>
                 </div>
-                <CareerTest/>
+                {loading ?
+                    <h4>Loading questions, this may take upto 30 seconds</h4> :
+                    <CareerTest
+                        isTestFinished={testFinished}
+                        currentQuestion={currentQuestion}
+                    />
+                }
             </div>
         </div>
     )
