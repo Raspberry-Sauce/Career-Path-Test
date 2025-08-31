@@ -4,7 +4,7 @@ import CareerTest from "./components/CareerTest";
 import {useEffect, useRef, useState} from "react";
 import {answerTestQuestion, getQuestionForUser, getUserLatestSubmission} from "./services/TestService";
 
-import type {QuestionProp, QuestionsListProp} from "./types";
+import type {AnswerProp, QuestionProp, QuestionsListProp} from "./types";
 
 function CareerPathTest() {
 
@@ -18,41 +18,56 @@ function CareerPathTest() {
     const [testFinished, setTestFinished] = useState(false);
     const currentQuestionNumber = useRef<number>(1);
     const [numberOfQuestions, setNumberOfQuestions] = useState(0);
+    const [answers, setAnswers] = useState<AnswerProp[]>([]);
 
     useEffect(() => {
-        getQuestionForUser(username).then(response => {
-            setQuestions(response.questions);
-            setNumberOfQuestions(response.questions?.length)
-            setLoading(false);
-            getFirstUnansweredQuestion(response.questions)
-
-
-            getUserLatestSubmission(username).then(response => {
-                console.log(response)
+        getQuestionForUser(username).then(questionsResponse => {
+            setQuestions(questionsResponse.questions);
+            getUserLatestSubmission(username).then(latestSubmissionResponse => {
+                const latestResponse: string | void = latestSubmissionResponse.latestSubmission;
+                const questionsLength: number = questionsResponse.questions?.length;
+                if (latestResponse) {
+                    setTestFinished(true);
+                } else {
+                    setCurrentQuestion(questionsResponse.questions[0])
+                }
+                setNumberOfQuestions(questionsLength)
+                setLoading(false);
             })
-            //TODO Check questions to see if test is finished
         }).catch(error => console.log("Error found getting test questions", error))
     }, [user])
 
-    function getFirstUnansweredQuestion(questions) {
-        setCurrentQuestion(questions[0]);
-    }
 
     function answerQuestion(questionAnswer: number) {
-        answerTestQuestion(questionAnswer, currentQuestion.id, username).then(() => {
+        const updatedAnswers: AnswerProp[] = answers;
+
+        //TODO need to check here for previously submitted answers and replace if needed
+        updatedAnswers.push({
+            questionId: currentQuestion.id,
+            answer: questionAnswer
+        });
+
+        setAnswers(updatedAnswers);
+
+        if (currentQuestionNumber.current === numberOfQuestions) {
+            submitTest();
+        } else {
             gotoNextQuestion();
+        }
+    }
+
+    function submitTest() {
+        answerTestQuestion(answers, currentQuestion.id, username).then(() => {
+            setTestFinished(true);
         }).catch(error => console.log("Error saving question answer", error))
     }
 
-    function gotoPreviousQuestion() {
-
-    }
-
     function gotoNextQuestion() {
-        const newQuestionNumber:number = currentQuestionNumber.current
+        const newQuestionNumber: number = currentQuestionNumber.current
         currentQuestionNumber.current = newQuestionNumber + 1;
         setCurrentQuestion(questions[newQuestionNumber])
     }
+
 
     return (
         <div

@@ -1,9 +1,14 @@
 export type QuestionProp = {
     id: string,
     text: string,
-    answer?: number
+    latestSubmission?: string
 }
 
 export type QuestionsListProp = {
     questions: QuestionProp[]
+}
+
+export type AnswerProp = {
+    questionId: string,
+    answer: number,
 }
