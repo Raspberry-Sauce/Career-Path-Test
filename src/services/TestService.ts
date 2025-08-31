@@ -17,9 +17,9 @@ export const getUserLatestSubmission = (username: string) => {
     }).then((response) => {
         return response.json();
     });
-}
+};
 
-export const answerTestQuestion = (answers:AnswerProp[], questionId: string, username: string) => {
+export const answerTestQuestion = (answers:AnswerProp[], username: string) => {
     return fetch("https://fhc-api.onrender.com/submissions?user=" + username, {
         method: "POST",
         headers: {
@@ -34,4 +34,4 @@ export const answerTestQuestion = (answers:AnswerProp[], questionId: string, use
         }
         return response.json();
     });
-}
+};

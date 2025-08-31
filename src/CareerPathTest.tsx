@@ -4,15 +4,15 @@ import CareerTest from "./components/CareerTest";
 import {useEffect, useRef, useState} from "react";
 import {answerTestQuestion, getQuestionForUser, getUserLatestSubmission} from "./services/TestService";
 
-import type {AnswerProp, QuestionProp, QuestionsListProp} from "./types";
+import type {AnswerProp, QuestionProp} from "./types";
 
 function CareerPathTest() {
 
     const [user] = useSearchParams();
-    const username: string = user.get("user")
+    const username: string  = user.get("user") ?? "";
 
-    const [questions, setQuestions] = useState<QuestionsListProp | []>([]);
-    const [currentQuestion, setCurrentQuestion] = useState<QuestionProp>(null);
+    const [questions, setQuestions] = useState<QuestionProp[]>([]);
+    const [currentQuestion, setCurrentQuestion] = useState<QuestionProp | null>(null);
     const [loading, setLoading] = useState(true);
     const [testFinished, setTestFinished] = useState(false);
     const currentQuestionNumber = useRef<number>(1);
@@ -27,14 +27,15 @@ function CareerPathTest() {
                 const questionsLength: number = questionsResponse.questions?.length;
                 if (latestResponse) {
                     setTestFinished(true);
+                    setCurrentQuestion(questionsResponse.questions[0]);
                 } else {
-                    setCurrentQuestion(questionsResponse.questions[0])
+                    setCurrentQuestion(questionsResponse.questions[0]);
                 }
-                setNumberOfQuestions(questionsLength)
+                setNumberOfQuestions(questionsLength);
                 setLoading(false);
-            })
-        }).catch(error => console.log("Error found getting test questions", error))
-    }, [user])
+            });
+        }).catch(error => console.log("Error found getting test questions", error));
+    }, [username]);
 
 
     function answerQuestion(questionAnswer: number) {
@@ -42,7 +43,7 @@ function CareerPathTest() {
 
         //TODO need to check here for previously submitted answers and replace if needed
         updatedAnswers.push({
-            questionId: currentQuestion.id,
+            questionId: (currentQuestion as QuestionProp).id,
             answer: questionAnswer
         });
 
@@ -56,15 +57,15 @@ function CareerPathTest() {
     }
 
     function submitTest() {
-        answerTestQuestion(answers, currentQuestion.id, username).then(() => {
+        answerTestQuestion(answers, username).then(() => {
             setTestFinished(true);
-        }).catch(error => console.log("Error saving question answer", error))
+        }).catch(error => console.log("Error saving question answer", error));
     }
 
     function gotoNextQuestion() {
-        const newQuestionNumber: number = currentQuestionNumber.current
+        const newQuestionNumber: number = currentQuestionNumber.current;
         currentQuestionNumber.current = newQuestionNumber + 1;
-        setCurrentQuestion(questions[newQuestionNumber])
+        setCurrentQuestion(questions[newQuestionNumber]);
     }
 
     return (
@@ -103,7 +104,7 @@ function CareerPathTest() {
                 </div>
                 {loading ?
                     <h4>Loading questions, this may take upto 30 seconds</h4> :
-                    <CareerTest
+                    currentQuestion && <CareerTest
                         isTestFinished={testFinished}
                         currentQuestion={currentQuestion}
                         totalQuestions={numberOfQuestions}
@@ -113,7 +114,7 @@ function CareerPathTest() {
                 }
             </div>
         </div>
-    )
+    );
 }
 
 export default CareerPathTest;

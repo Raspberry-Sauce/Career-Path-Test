@@ -13,3 +13,6 @@ For submitting the test, we need to collect all answers in an array and send on 
 
 # Answer Selector
 For the actual selection of answer, we dont need to pass much too it, and want it to be as simple as possible. There's no indication of needing to display previously saved answers, so just need to pass a function which passes back the score of the answered question
+
+# Remarks
+With time it would've been good to work on the styling more, we're missing logos, the info cards are filled out as well they could be, as well as the progress bar, and just other changes just to bring it more towards the provided designs.

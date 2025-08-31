@@ -6,7 +6,7 @@ type CareerTestProps = {
     currentQuestion: QuestionProp,
     totalQuestions: number,
     isTestFinished: boolean,
-    onQuestionAnswer: (number) => void
+    onQuestionAnswer: (value: number) => void
 }
 
 function CareerTest({currentQuestionNumber, totalQuestions, currentQuestion, isTestFinished, onQuestionAnswer}: CareerTestProps) {
@@ -19,7 +19,7 @@ function CareerTest({currentQuestionNumber, totalQuestions, currentQuestion, isT
                 <label>Well done on completing your test. You can view the results now.</label>
                 <button className="rounded-md h-12 w-48 bg-orange-400 hover:bg-orange-500 cursor-pointer" >See your results</button>
             </div>
-        )
+        );
     }
 
     return (
@@ -36,8 +36,7 @@ function CareerTest({currentQuestionNumber, totalQuestions, currentQuestion, isT
             </div>
             <AnswerSelector onAnswerSelect={answer => onQuestionAnswer(answer)}/>
         </div>
-    )
-
+    );
 }
 
 export default CareerTest;

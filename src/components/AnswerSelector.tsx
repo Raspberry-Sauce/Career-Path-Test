@@ -1,7 +1,7 @@
-import {ReactNode} from "react";
+import type {ReactNode} from "react";
 
 type AnswerSelectorProps = {
-    onAnswerSelect: (number) => void
+    onAnswerSelect: (value: number) => void
 }
 
 const NUMBER_OF_ANSWERS = 8;
@@ -36,7 +36,7 @@ function AnswerSelector({onAnswerSelect}: AnswerSelectorProps)  {
                 <label>Strongly agree</label>
             </div>
         </div>
-    )
+    );
 }
 
 export default AnswerSelector;
