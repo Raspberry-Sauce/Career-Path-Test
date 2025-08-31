@@ -14,7 +14,7 @@ function CareerTest({currentQuestionNumber, totalQuestions, currentQuestion, isT
 
     if (isTestFinished) {
         return (
-            <div id="careerTestContainer" className="w-[90%] h-96 border-1 shadow-md px-24 py-4 flex flex-col gap-4">
+            <div id="careerTestContainer" className="w-[90%] h-96 border-1 shadow-md px-24 py-4 flex flex-col gap-4 text-center">
                 Test Completed
             </div>
         )

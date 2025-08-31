@@ -71,12 +71,12 @@ function CareerPathTest() {
         <div
             id='careerPathTestContainer'
         >
-            <div id="careerPathTestHeader">
-                <img src={""} alt={"Career Path Test Home"}/>
-                <h4>Career path test</h4>
-                <h3>Discover careers that match your skills and personality</h3>
+            <div id="careerPathTestHeader" className="relative inline-block shadow-sm">
+                <img className="h-56 w-screen flex" src="https://fhc-frontend.onrender.com/assets/discover-journey-maze.svg" alt={"Career Path Test Home"}/>
+                <label className="absolute bottom-12 left-4 px-8 py-1 font-bold text-3xl">Career path test</label>
+                <label className="absolute bottom-4 left-4 px-8 py-1 text-2xl">Discover careers that match your skills and personality</label>
             </div>
-            <div id="careerPathTestContentContainer" className="flex flex-col gap-8 justify-center items-center">
+            <div id="careerPathTestContentContainer" className="flex flex-col gap-8 justify-center items-center p-4">
                 <div id="careerPathTestInfoCards" className="flex flex-row justify-between gap-3">
                     <InfoCard
                         id="infoCard1"
