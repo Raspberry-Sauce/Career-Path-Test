@@ -6,11 +6,10 @@ type CareerTestProps = {
     currentQuestion: QuestionProp,
     totalQuestions: number,
     isTestFinished: boolean,
-    percentageCompleted: number
     onQuestionAnswer: (number) => void
 }
 
-function CareerTest({currentQuestionNumber, totalQuestions, currentQuestion, isTestFinished, percentageCompleted, onQuestionAnswer}: CareerTestProps) {
+function CareerTest({currentQuestionNumber, totalQuestions, currentQuestion, isTestFinished, onQuestionAnswer}: CareerTestProps) {
 
 
     if (isTestFinished) {
@@ -24,7 +23,7 @@ function CareerTest({currentQuestionNumber, totalQuestions, currentQuestion, isT
     return (
         <div id="careerTestContainer" className="w-[90%] h-96 border-1 shadow-md px-24 py-4 flex flex-col gap-4">
             <div id="careerTestPercentage">
-                <p>Your progress - {percentageCompleted}%</p>
+                <p>Your progress - {Math.floor((currentQuestionNumber - 1)/totalQuestions * 100)}%</p>
             </div>
             <div className="flex flex-col items-start">
                 <div className="flex gap-4 items-center">

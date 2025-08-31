@@ -13,7 +13,6 @@ function CareerPathTest() {
 
     const [questions, setQuestions] = useState<QuestionsListProp | []>([]);
     const [currentQuestion, setCurrentQuestion] = useState<QuestionProp>(null);
-    const [percentComplete, setPercentComplete] = useState(0);
     const [loading, setLoading] = useState(true);
     const [testFinished, setTestFinished] = useState(false);
     const currentQuestionNumber = useRef<number>(1);
@@ -68,7 +67,6 @@ function CareerPathTest() {
         setCurrentQuestion(questions[newQuestionNumber])
     }
 
-
     return (
         <div
             id='careerPathTestContainer'
@@ -110,7 +108,6 @@ function CareerPathTest() {
                         currentQuestion={currentQuestion}
                         totalQuestions={numberOfQuestions}
                         currentQuestionNumber={currentQuestionNumber.current}
-                        percentageCompleted={percentComplete}
                         onQuestionAnswer={number => answerQuestion(number)}
                     />
                 }
