@@ -1,33 +1,57 @@
 import {useSearchParams} from "react-router-dom";
 import InfoCard from "./components/InfoCard";
 import CareerTest from "./components/CareerTest";
-import {useEffect, useState} from "react";
-import {getQuestionForUser} from "./services/TestService";
+import {useEffect, useRef, useState} from "react";
+import {answerTestQuestion, getQuestionForUser, getUserLatestSubmission} from "./services/TestService";
 
-import type {QuestionProp} from "./types";
+import type {QuestionProp, QuestionsListProp} from "./types";
 
 function CareerPathTest() {
 
     const [user] = useSearchParams();
     const username: string = user.get("user")
 
-    const [questions, setQuestions] = useState<unknown>({});
-    const [currentQuestion, setCurrentQuestion] = useState<QuestionProp>(null)
+    const [questions, setQuestions] = useState<QuestionsListProp | []>([]);
+    const [currentQuestion, setCurrentQuestion] = useState<QuestionProp>(null);
+    const [percentComplete, setPercentComplete] = useState(0);
     const [loading, setLoading] = useState(true);
     const [testFinished, setTestFinished] = useState(false);
+    const currentQuestionNumber = useRef<number>(1);
+    const [numberOfQuestions, setNumberOfQuestions] = useState(0);
 
     useEffect(() => {
         getQuestionForUser(username).then(response => {
             setQuestions(response.questions);
+            setNumberOfQuestions(response.questions?.length)
             setLoading(false);
             getFirstUnansweredQuestion(response.questions)
 
+
+            getUserLatestSubmission(username).then(response => {
+                console.log(response)
+            })
             //TODO Check questions to see if test is finished
         }).catch(error => console.log("Error found getting test questions", error))
     }, [user])
 
     function getFirstUnansweredQuestion(questions) {
         setCurrentQuestion(questions[0]);
+    }
+
+    function answerQuestion(questionAnswer: number) {
+        answerTestQuestion(questionAnswer, currentQuestion.id, username).then(() => {
+            gotoNextQuestion();
+        }).catch(error => console.log("Error saving question answer", error))
+    }
+
+    function gotoPreviousQuestion() {
+
+    }
+
+    function gotoNextQuestion() {
+        const newQuestionNumber:number = currentQuestionNumber.current
+        currentQuestionNumber.current = newQuestionNumber + 1;
+        setCurrentQuestion(questions[newQuestionNumber])
     }
 
     return (
@@ -69,6 +93,10 @@ function CareerPathTest() {
                     <CareerTest
                         isTestFinished={testFinished}
                         currentQuestion={currentQuestion}
+                        totalQuestions={numberOfQuestions}
+                        currentQuestionNumber={currentQuestionNumber.current}
+                        percentageCompleted={percentComplete}
+                        onQuestionAnswer={number => answerQuestion(number)}
                     />
                 }
             </div>

@@ -3,3 +3,7 @@ export type QuestionProp = {
     text: string,
     answer?: number
 }
+
+export type QuestionsListProp = {
+    questions: QuestionProp[]
+}
